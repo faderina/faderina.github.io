@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="faderina hardworks — outbound relay" />
+  <title>faderina hardworks</title>
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="gate-active">
+  <audio id="siteBgm" preload="auto" playsinline loop style="display: none" aria-hidden="true">
+    <source src="Sounds/yabujin.mp3" type="audio/mpeg" />
+  </audio>
+  <div class="vol-control" id="volControl" aria-label="Volume control">
+    <button type="button" class="vol-control__btn" id="volToggle" aria-label="Toggle mute">
+      <img class="vol-control__icon" src="assets/speaker.svg" alt="" aria-hidden="true" />
+    </button>
+    <div class="vol-control__track-wrap">
+      <input type="range" class="vol-control__slider" id="volSlider" min="0" max="100" value="72" aria-label="Volume" />
+    </div>
+  </div>
+
+  <div class="world world--blurred" id="world" aria-hidden="true">
+    <div class="void-layer" aria-hidden="true"></div>
+    <div class="mesh-blobs" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <span class="blob b3"></span>
+      <span class="blob b4"></span>
+      <span class="blob b5"></span>
+    </div>
+    <canvas id="plasma" class="plasma-canvas" aria-hidden="true"></canvas>
+    <canvas id="field" class="field-canvas" aria-hidden="true"></canvas>
+    <canvas id="ribbons" class="ribbons-canvas" aria-hidden="true"></canvas>
+    <canvas id="glyphs" class="glyph-canvas" aria-hidden="true"></canvas>
+    <canvas id="noise" class="noise-canvas" aria-hidden="true"></canvas>
+    <div class="creature-layer" aria-hidden="true">
+      <div class="creature creature--1">
+        <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path class="creature-skin" d="M100 28c-22 0-40 24-38 52 2 40-8 58-18 72-14 18-22 48-18 88 4 36 18 64 34 72 8 4 20 6 40 6s32-2 40-6c16-8 30-36 34-72 4-40-4-70-18-88-10-14-20-32-18-72 2-28-16-52-38-52z" />
+          <path class="creature-limb" fill="none" d="M62 120 L28 200 L18 280 M138 120 L172 200 L182 280 M88 200 L72 300 M112 200 L128 300" stroke-linecap="round" stroke-width="6" />
+          <ellipse class="creature-eye" cx="78" cy="88" rx="14" ry="20" />
+          <ellipse class="creature-eye" cx="122" cy="88" rx="14" ry="20" />
+        </svg>
+      </div>
+      <div class="creature creature--2">
+        <svg viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path class="creature-skin" d="M100 12C70 12 48 44 52 80c6 52-4 76-24 100-20 26-28 72-20 120 6 38 26 70 48 78 12 4 28 6 44 6s32-2 44-6c22-8 42-40 48-78 8-48 0-94-20-120-20-24-30-48-24-100 4-36-18-68-48-68z" />
+          <path class="creature-limb" fill="none" d="M52 140 L12 240 L8 310 M148 140 L188 240 L192 310 M82 220 L58 320 M118 220 L142 320" stroke-linecap="round" stroke-width="5" />
+          <ellipse class="creature-eye" cx="72" cy="72" rx="18" ry="26" />
+          <ellipse class="creature-eye" cx="128" cy="72" rx="18" ry="26" />
+        </svg>
+      </div>
+      <div class="creature creature--3">
+        <svg viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path class="creature-skin" d="M110 40c-28 0-50 30-46 64 8 70-12 90-28 110-18 22-26 56-22 96 4 34 20 58 42 64 10 2 26 4 54 4s44-2 54-4c22-6 38-30 42-64 4-40-4-74-22-96-16-20-36-40-28-110 4-34-18-64-46-64z" />
+          <path class="creature-limb" fill="none" d="M70 130 L34 210 L24 288 M150 130 L186 210 L196 288 M92 210 L76 298 M128 210 L144 298" stroke-linecap="round" stroke-width="7" />
+          <ellipse class="creature-eye" cx="82" cy="100" rx="12" ry="18" />
+          <ellipse class="creature-eye" cx="138" cy="100" rx="12" ry="18" />
+        </svg>
+      </div>
+      <div class="creature creature--4">
+        <svg viewBox="0 0 180 300" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path class="creature-skin" d="M90 20c-24 0-42 28-40 56 4 48-14 70-26 88-12 18-20 52-16 92 4 32 18 56 36 62 8 2 20 4 30 4s22-2 30-4c18-6 32-30 36-62 4-40-4-74-16-92-12-18-30-40-26-88 2-28-16-56-40-56z" />
+          <path class="creature-limb" fill="none" d="M54 118 L20 200 L14 270 M126 118 L160 200 L166 270 M76 190 L62 278 M104 190 L118 278" stroke-linecap="round" stroke-width="5" />
+          <ellipse class="creature-eye" cx="68" cy="82" rx="11" ry="16" />
+          <ellipse class="creature-eye" cx="112" cy="82" rx="11" ry="16" />
+        </svg>
+      </div>
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="chromatic" aria-hidden="true"></div>
+    <div class="stutter-grid" aria-hidden="true"></div>
+
+    <main class="stage stage--drift" id="mainShell">
+      <div class="layout-surface" id="layoutSurface">
+        <div class="orbit-field" id="orbitField">
+          <div class="orbit-core">
+            <header class="hero-anchor" id="beaconEl">
+              <div class="hero-title-wrap">
+                <p class="ticker" id="ticker" aria-live="polite"></p>
+                <h1 class="title-glitch title-glitch--steady" id="titleGlitch" data-text="faderina hardworks">
+                  faderina hardworks
+                </h1>
+                <p class="company-llc">I study what I cannot see and see what I cannot study.</p>
+                <p class="subline">
+                  <time id="astClock" class="subline__time" datetime="" title="Arabian Standard Time (UTC+3)">—:—:—</time>
+                  <span class="subline__tz">AST</span>
+                </p>
+              </div>
+            </header>
+
+            <nav class="social-nav" aria-label="Social links">
+              <a
+                class="discord-chip"
+                id="discordChip"
+                href="https://discord.com/users/748611198848860292"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Discord profile (opens in new tab)"
+              >
+                <span class="discord-chip__avatar-wrap">
+                  <img class="discord-chip__avatar" id="discordAvatar" src="" alt="Discord avatar" loading="lazy" />
+                  <img class="discord-chip__decor" id="discordDecor" src="" alt="" aria-hidden="true" loading="lazy" />
+                </span>
+                <span class="discord-chip__meta">
+                  <span class="discord-chip__name" id="discordName">Fade (faderina)</span>
+                  <span class="discord-chip__status">
+                    <span class="discord-chip__dot" id="discordDot" aria-hidden="true"></span>
+                    <span id="discordPresence">offline</span>
+                  </span>
+                  <span class="discord-chip__activity" id="discordActivity">currently doing nothing</span>
+                </span>
+              </a>
+              <ul class="social-grid" id="socialGrid"></ul>
+              <div class="view-counter" id="viewCounter" aria-label="Displayed visits" title="Total views">
+                <svg class="view-counter__eye" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <ellipse cx="16" cy="10" rx="14" ry="8.5" fill="#f5f5f5" />
+                  <circle cx="16" cy="10" r="5" fill="#0e0e12" />
+                  <circle cx="16" cy="10" r="2" fill="#f5f5f5" />
+                </svg>
+                <span class="view-counter__value" id="viewCountValue" aria-live="polite">8,530</span>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <footer class="footer-sigil" id="footEl">
+          <span class="footer-llc">faderina hardworks</span>
+          <span class="footer-sep" aria-hidden="true">·</span>
+          <span id="footerGlitch">0x????????</span>
+        </footer>
+      </div>
+    </main>
+
+    <div class="dvd-smiley-layer" id="dvdSmileyLayer" aria-hidden="true"></div>
+  </div>
+
+  <button type="button" class="enter-overlay" id="enterOverlay" aria-label="Enter site" aria-hidden="false">
+    enter
+  </button>
+
+  <script src="logos.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
