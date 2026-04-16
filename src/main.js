@@ -10,17 +10,18 @@ const state = {
 };
 
 const links = {
-  github: "#",
-  x: "#",
-  discord: "#",
-  instagram: "#",
-  roblox: "#",
-  tiktok: "#"
+  github: "https://github.com/faderina",
+  x: "https://x.com/faderinaa",
+  discord: "discord://-/users/748611198848860292",
+  instagram: "https://www.instagram.com/fofomica",
+  roblox: "https://www.roblox.com/users/4441112/profile",
+  tiktok: "https://www.tiktok.com/@faderinaa"
 };
 
 const enterAudio = new Audio("/assets/audio/enter.mp3");
 const bgAudio = new Audio("/assets/audio/bg.mp3");
 bgAudio.loop = true;
+const customCursor = createCustomCursor();
 
 function playSequence() {
   enterAudio.currentTime = 0;
@@ -32,6 +33,8 @@ function playSequence() {
 }
 
 function renderSite() {
+  customCursor.setUpsideDown(state.isUpsideDown);
+
   app.innerHTML = `
     <div class="site-frame is-entering">
       <button class="rotate-btn" aria-label="Rotate site">
@@ -70,6 +73,7 @@ function renderSite() {
 
     state.isUpsideDown = !state.isUpsideDown;
     scene.classList.toggle("is-upside-down", state.isUpsideDown);
+    customCursor.setUpsideDown(state.isUpsideDown);
   });
 
   const rotateIcon = rotateButton.querySelector(".rotate-btn__icon");
@@ -82,6 +86,7 @@ function renderSite() {
 
 function render() {
   if (!state.hasEntered) {
+    customCursor.setUpsideDown(false);
     createEnterScreen(app, () => {
       state.hasEntered = true;
       render();
@@ -94,3 +99,49 @@ function render() {
 }
 
 render();
+
+function createCustomCursor() {
+  const existingCursor = document.querySelector(".custom-cursor");
+  if (existingCursor) {
+    existingCursor.remove();
+  }
+
+  const cursor = document.createElement("div");
+  cursor.className = "custom-cursor";
+  cursor.innerHTML = `<div class="custom-cursor__image" aria-hidden="true"></div>`;
+  document.body.append(cursor);
+
+  const show = () => {
+    cursor.classList.add("is-visible");
+  };
+
+  const hide = () => {
+    cursor.classList.remove("is-visible");
+  };
+
+  const updatePosition = (event) => {
+    if (event.pointerType === "touch") {
+      hide();
+      return;
+    }
+
+    cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+    show();
+  };
+
+  window.addEventListener("pointermove", updatePosition);
+  window.addEventListener("pointerdown", updatePosition);
+  window.addEventListener("pointerleave", hide);
+  window.addEventListener("blur", hide);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      hide();
+    }
+  });
+
+  return {
+    setUpsideDown(isUpsideDown) {
+      cursor.classList.toggle("is-upside-down", isUpsideDown);
+    }
+  };
+}
