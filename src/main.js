@@ -17,6 +17,7 @@ const links = {
   roblox: "https://www.roblox.com/users/4441112/profile",
   tiktok: "https://www.tiktok.com/@faderinaa"
 };
+const tagline = "I study what I cannot see and see what I cannot study.";
 
 const enterAudio = new Audio("/assets/audio/enter.mp3");
 const bgAudio = new Audio("/assets/audio/bg.mp3");
@@ -42,8 +43,9 @@ function renderSite() {
       </button>
       <main class="site-scene ${state.isUpsideDown ? "is-upside-down" : ""}">
         <section class="left-panel">
-          <h1 class="site-title">faDeRINA</h1>
-          <p class="site-tagline">I study what I cannot see and see what I cannot study.</p>
+          <h1 class="site-title">Faderina</h1>
+          <p class="site-tagline">${tagline}</p>
+          <p class="site-tagline site-tagline--barcode" aria-label="${tagline}">${tagline}</p>
         </section>
         <img class="shinji-image" src="/assets/images/bg.png" alt="Shinji Hirako styled character" />
         <div class="icons-layer"></div>

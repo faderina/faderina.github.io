@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap");
+
 @font-face {
   font-family: "P5 Menu";
   src: url("/assets/fonts/P5 Menu.ttf") format("truetype");
@@ -148,14 +150,14 @@ body {
 .rotate-btn {
   position: absolute;
   top: 18px;
-  right: 22px;
+  right: 18px;
   z-index: 30;
-  width: 44px;
-  height: 44px;
+  width: 78px;
+  height: 78px;
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: #222;
+  color: var(--blue);
   line-height: 1;
   padding: 0;
 }
@@ -163,9 +165,12 @@ body {
 .rotate-btn__icon {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  font-size: 34px;
+  width: 78px;
+  height: 78px;
+  font-size: 60px;
+  font-weight: 700;
+  color: var(--blue);
+  -webkit-text-stroke: 1.4px var(--blue);
   transform: scale(1);
   transition: transform 170ms ease;
   transform-origin: center center;
@@ -206,36 +211,80 @@ body {
 
 .left-panel {
   position: absolute;
-  top: 28px;
-  left: 48px;
+  top: 8px;
+  left: 10px;
   z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(12px, 1.6vw, 22px);
-  max-width: min(720px, 56vw);
+  gap: clamp(2px, 0.35vw, 6px);
+  max-width: min(700px, 60vw);
 }
 
 .site-title {
-  font-family: "P5 Menu", sans-serif;
-  font-size: clamp(38px, 4.3vw, 80px);
-  line-height: 1.02;
-  display: inline-block;
+  font-family: "BM Space", sans-serif;
+  font-size: clamp(58px, 6.4vw, 122px);
+  line-height: 0.84;
   margin: 0;
-  color: #fff;
-  -webkit-text-fill-color: #fff;
-  -webkit-text-stroke: clamp(3px, 0.3vw, 6px) var(--blue);
+  color: #fffdf7;
+  -webkit-text-fill-color: #fffdf7;
+  -webkit-text-stroke: clamp(3px, 0.24vw, 5px) var(--blue);
   paint-order: stroke fill;
-  letter-spacing: clamp(2px, 0.36vw, 6px);
-  text-shadow: 0 5px 7px var(--shadow);
+  letter-spacing: clamp(-1px, -0.06vw, 0px);
+  text-shadow: 0 2px 0 rgba(29, 46, 132, 0.16), 0 5px 10px rgba(0, 0, 0, 0.16);
+  user-select: none;
 }
 
 .site-tagline {
   margin: 0;
   font-family: "BM Space", sans-serif;
-  font-size: clamp(12px, 1.2vw, 18px);
-  line-height: 1.35;
-  color: #2b2b2b;
+  font-size: clamp(8px, 0.82vw, 15px);
+  line-height: 1.02;
+  color: #1c1c1c;
+  max-width: min(520px, 46vw);
+}
+
+.site-tagline--barcode {
+  font-family: "Libre Barcode 128", system-ui;
+  font-size: clamp(12px, 1.02vw, 20px);
+  line-height: 0.68;
+  letter-spacing: 0.01em;
+  color: #1c1c1c;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.98;
+}
+
+@media (max-width: 900px) {
+  .left-panel {
+    top: 8px;
+    left: 8px;
+    max-width: min(94vw, 620px);
+  }
+
+  .site-title {
+    font-size: clamp(44px, 12vw, 88px);
+  }
+
+  .site-tagline {
+    font-size: clamp(7px, 1.8vw, 12px);
+    max-width: min(86vw, 420px);
+  }
+
+  .site-tagline--barcode {
+    font-size: clamp(10px, 2.2vw, 16px);
+  }
+
+  .rotate-btn {
+    width: 64px;
+    height: 64px;
+  }
+
+  .rotate-btn__icon {
+    width: 64px;
+    height: 64px;
+    font-size: 50px;
+  }
 }
 
 .shinji-image {
