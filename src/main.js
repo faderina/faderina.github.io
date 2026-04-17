@@ -11,11 +11,11 @@ const state = {
 
 const links = {
   github: "https://github.com/faderina",
-  x: "x.com/faderinaa",
+  x: "https://x.com/faderinaa",
   discord: "discord://-/users/748611198848860292",
-  instagram: "instagram.com/fofomica",
-  roblox: "roblox.com/users/4441112",
-  tiktok: "tiktok.com/@faderinaa"
+  instagram: "https://instagram.com/fofomica",
+  roblox: "https://www.roblox.com/users/4441112/profile",
+  tiktok: "https://www.tiktok.com/@faderinaa"
 };
 
 const enterAudio = new Audio("/assets/audio/enter.mp3");
