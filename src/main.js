@@ -10,12 +10,12 @@ const state = {
 };
 
 const links = {
-  github: "#",
-  x: "#",
-  discord: "#",
-  instagram: "#",
-  roblox: "#",
-  tiktok: "#"
+  github: "https://github.com/faderina",
+  x: "x.com/faderinaa",
+  discord: "discord://-/users/748611198848860292",
+  instagram: "instagram.com/fofomica",
+  roblox: "roblox.com/users/4441112",
+  tiktok: "tiktok.com/@faderinaa"
 };
 
 const enterAudio = new Audio("/assets/audio/enter.mp3");
@@ -123,7 +123,7 @@ function updateCursorRotation() {
 
 // Wrap the original rotate logic to also update cursor
 const originalRenderSite = renderSite;
-renderSite = function() {
+renderSite = function () {
   originalRenderSite();
   const rotateButton = app.querySelector(".rotate-btn");
   if (rotateButton) {
