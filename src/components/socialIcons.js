@@ -8,12 +8,24 @@ const iconConfig = [
 ];
 
 export function createSocialIcons(container, links) {
+  const isMobile = window.innerWidth <= 768;
+
   const iconsMarkup = iconConfig
-    .map(
-      (icon) => `
+    .map((icon, index) => {
+      let top = icon.top;
+      let left = icon.left;
+
+      if (isMobile) {
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+        top = `${38 + row * 13}%`;
+        left = `${10 + col * 32}%`;
+      }
+
+      return `
         <a
           class="social-icon ${icon.name}"
-          style="top:${icon.top};left:${icon.left};"
+          style="top:${top};left:${left};"
           href="${links[icon.name] || "#"}"
           target="_blank"
           rel="noreferrer noopener"
@@ -22,8 +34,8 @@ export function createSocialIcons(container, links) {
         >
           <img src="/assets/images/icons/${icon.name}.png" alt="${icon.name} icon" draggable="false" />
         </a>
-      `
-    )
+      `;
+    })
     .join("");
 
   container.innerHTML = iconsMarkup;
@@ -67,18 +79,43 @@ function createIconState(icon, container) {
   paint(state);
 
   const onPointerDown = (event) => {
-    if (event.button !== 2) {
+    // Ignore middle click
+    if (event.button === 1) {
       return;
     }
 
-    event.preventDefault();
+    // On Desktop (mouse), only allow right-click (2) to drag.
+    if (event.pointerType === "mouse" && event.button === 0) {
+      return;
+    }
+
     const rect = icon.getBoundingClientRect();
     state.isDragging = true;
     state.hasMoved = false;
+
+    // Use visual coordinates for offset
+    const containerRect = container.getBoundingClientRect();
+    const scene = container.closest(".site-scene");
+    const isUpsideDown = scene && scene.classList.contains("is-upside-down");
+
+    // On mobile/touch, we don't invert the global mouse controls, so we must
+    // manually flip the local coordinates here to keep the icon under the finger.
+    const needsInversion = isUpsideDown && (window.innerWidth <= 768 || event.pointerType === "touch");
+
     state.pointerOffsetX = event.clientX - rect.left;
     state.pointerOffsetY = event.clientY - rect.top;
-    icon.setPointerCapture(event.pointerId);
+
+    if (needsInversion) {
+      state.pointerOffsetX = rect.width - state.pointerOffsetX;
+      state.pointerOffsetY = rect.height - state.pointerOffsetY;
+    }
+
     icon.classList.add("is-dragging");
+
+    // Add window listeners for smooth dragging during inversion
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerEnd);
+    window.addEventListener("pointercancel", onPointerEnd);
   };
 
   const onPointerMove = (event) => {
@@ -87,10 +124,24 @@ function createIconState(icon, container) {
     }
 
     const containerRect = container.getBoundingClientRect();
-    state.targetX = event.clientX - containerRect.left - state.pointerOffsetX;
-    state.targetY = event.clientY - containerRect.top - state.pointerOffsetY;
+    const scene = container.closest(".site-scene");
+    const isUpsideDown = scene && scene.classList.contains("is-upside-down");
+    const needsInversion = isUpsideDown && (window.innerWidth <= 768 || event.pointerType === "touch");
 
-    if (Math.abs(state.targetX - state.x) > 3 || Math.abs(state.targetY - state.y) > 3) {
+    let mouseX = event.clientX - containerRect.left;
+    let mouseY = event.clientY - containerRect.top;
+
+    if (needsInversion) {
+      mouseX = containerRect.width - mouseX;
+      mouseY = containerRect.height - mouseY;
+    }
+
+    state.targetX = mouseX - state.pointerOffsetX;
+    state.targetY = mouseY - state.pointerOffsetY;
+
+    const moveThreshold = 5;
+    if (Math.abs(state.targetX - state.x) > moveThreshold ||
+      Math.abs(state.targetY - state.y) > moveThreshold) {
       state.hasMoved = true;
     }
 
@@ -106,17 +157,17 @@ function createIconState(icon, container) {
 
     state.isDragging = false;
     icon.classList.remove("is-dragging");
-    icon.releasePointerCapture(event.pointerId);
+    window.removeEventListener("pointermove", onPointerMove);
+    window.removeEventListener("pointerup", onPointerEnd);
+    window.removeEventListener("pointercancel", onPointerEnd);
   };
 
   const onClick = (event) => {
-    if (!state.hasMoved) {
-      return;
+    if (state.hasMoved) {
+      event.preventDefault();
+      event.stopPropagation();
+      state.hasMoved = false;
     }
-
-    event.preventDefault();
-    event.stopPropagation();
-    state.hasMoved = false;
   };
 
   const onDragStart = (event) => {
@@ -124,9 +175,6 @@ function createIconState(icon, container) {
   };
 
   icon.addEventListener("pointerdown", onPointerDown);
-  icon.addEventListener("pointermove", onPointerMove);
-  icon.addEventListener("pointerup", onPointerEnd);
-  icon.addEventListener("pointercancel", onPointerEnd);
   icon.addEventListener("click", onClick);
   icon.addEventListener("dragstart", onDragStart);
 
