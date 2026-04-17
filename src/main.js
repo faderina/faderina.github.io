@@ -21,6 +21,7 @@ const links = {
 const enterAudio = new Audio("/assets/audio/enter.mp3");
 const bgAudio = new Audio("/assets/audio/bg.mp3");
 bgAudio.loop = true;
+bgAudio.volume = 0.4;
 
 function playSequence() {
   enterAudio.currentTime = 0;
